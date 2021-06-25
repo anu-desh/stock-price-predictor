@@ -21,6 +21,7 @@ Jupyter Notebook-http://ipython.org/notebook.html
 Releases.
 
 DOWNLOAD THE ZIP FILE FROM THE REPOSITORY
+
 1.RUN THE FILE NAMED "data.ipynb"
 
 2.RUN THE " dashboard.py" 
