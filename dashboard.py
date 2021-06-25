@@ -5,7 +5,7 @@ import dash_html_components as html
 import pandas as pd
 import plotly.graph_objs as go
 from dash.dependencies import Input, Output
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 from sklearn.preprocessing import MinMaxScaler
 import numpy as np
 
@@ -68,7 +68,7 @@ train_data['predictions'] = train_predict
 test_data['predictions'] = y_pred
 
 days = 30
-for i in range(days):
+for i in range(days+1):
 
     new_input = new_dataset.values[-time_step:]
     new_input = scaler.fit_transform(new_input)
