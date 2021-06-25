@@ -10,14 +10,18 @@ from sklearn.preprocessing import MinMaxScaler
 import numpy as np
 
 # Loading data
-df = pd.read_csv('AAPL.csv')
-df["date"]=pd.to_datetime(df.date,format="%Y-%m-%d").dt.date
-df.index=df['date']
+df = pd.read_csv('NIFTY50.csv')
+df = df.iloc[::-1]
 
-new_dataset=pd.DataFrame(index=range(0,len(df)),columns=['Date','Close'])
+df["Open"] = df["Open"].str.replace(',', '')
+df.Open= df.Open.astype(float)
+df["Date"]=pd.to_datetime(df.Date).dt.date
+df.index=df['Date']
+
+new_dataset=pd.DataFrame(index=range(0,len(df)),columns=['Date','Open'])
 for i in range(0,len(df)):
-    new_dataset["Date"][i]=df['date'][i]
-    new_dataset["Close"][i]=df["close"][i]
+    new_dataset["Date"][i]=df['Date'][i]
+    new_dataset['Open'][i]=df['Open'][i]
 new_dataset.index = new_dataset.Date
 new_dataset.drop("Date",axis=1,inplace=True)
 
@@ -80,7 +84,7 @@ for i in range(days+1):
     new_pred = scaler.inverse_transform(new_pred)
 
     date = new_dataset.index[-1]+pd.to_timedelta(1,unit='d')
-    new_dataset = new_dataset.append(pd.DataFrame({"Close":new_pred[0][0]},index=[date]))
+    new_dataset = new_dataset.append(pd.DataFrame({"Open":new_pred[0][0]},index=[date]))
 
 predicted_plot = new_dataset[-days:]
 
@@ -98,14 +102,14 @@ app.layout = html.Div([
 							go.Scatter(
                                 name = "actual data",
 								x=test_data.index,
-								y=test_data["Close"],
+								y=test_data["Open"],
 								mode='lines'
 							),
 
 						],
 						"layout":go.Layout(
 							xaxis={'title':'Date'},
-							yaxis={'title':'Closing Rate'}
+							yaxis={'title':'Open Rate'}
 						)
 					}
 
@@ -129,13 +133,13 @@ app.layout = html.Div([
                             go.Scatter(
                                 name = "future prediction",
 								x=predicted_plot.index,
-								y=predicted_plot["Close"],
+								y=predicted_plot["Open"],
 								mode='lines'
 							),
 						],
 						"layout":go.Layout(
 							xaxis={'title':'Date'},
-							yaxis={'title':'Closing Rate'}
+							yaxis={'title':'Opening Price'}
 						)
 					}
 
