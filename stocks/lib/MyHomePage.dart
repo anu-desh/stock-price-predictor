@@ -38,7 +38,7 @@ print(rsi)
   }
 
   void notify() async {
-    Timer.periodic(Duration(minutes: 1), (timer) {
+    Timer.periodic(Duration(seconds: 30), (timer) {
       getRSI().then((value) {
         var newRsi;
         newRsi = double.parse(value);
@@ -86,6 +86,48 @@ print(rsi)
               Text("RSI",
                   style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
               Text(rsi.toString(), style: TextStyle(fontSize: 40)),
+              TextButton(
+                style: TextButton.styleFrom(
+                    backgroundColor: Colors.grey.withOpacity(.8)),
+                onPressed: () {
+                  getRSI().then((value) {
+                    var newRsi;
+                    newRsi = double.parse(value);
+                    if (rsi != newRsi) {
+                      setState(() {
+                        rsi = newRsi;
+                      });
+
+                      Locally locally = Locally(
+                        context: context,
+                        payload: 'test',
+                        pageRoute: MaterialPageRoute(
+                            builder: (context) => MyHomePage(rsi: rsi)),
+                        appIcon: 'mipmap/ic_launcher',
+                      );
+
+                      if (rsi > 75) {
+                        locally.show(
+                          title: "Nifty 50 overbought",
+                          message: "Raised above 75 with RSI $rsi",
+                        );
+                      } else if (rsi < 25) {
+                        locally.show(
+                          title: "Nifty 50 oversold",
+                          message: "Dipped below 25 with RSI $rsi",
+                        );
+                      }
+                    }
+                  });
+                },
+                child: Text(
+                  "Refresh",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
             ],
           ),
         ),
