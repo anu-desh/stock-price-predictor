@@ -1,5 +1,7 @@
 # stock-price-predictor
 
+This project predicts the opening price of the stock(NIFTY) for the future 30 days using an improved LSTM model and RSI notifier app which notifies when the sock is oversold or overbought.
+
 Hardrware requirements:
 
 - Personal computer with gpu( minimal specifications)
